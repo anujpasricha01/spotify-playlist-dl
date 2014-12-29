@@ -1,6 +1,5 @@
 need to do:
 -make app accessible for all users
--fetch playlist song names
 -search youtube by song name
 -scrape appropriate video page for song audio file
 -download aforementioned audio file
