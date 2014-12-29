@@ -51,12 +51,24 @@ def get_user_playlists(data):
 
 def get_songs_from_playlist(data):
 	song_names = []
+	song_albums = []
+	song_artists = []
+	#print songs_response['items'][5]['track']['album']['name']
+	#print songs_response['items'][5]['track']['artists'][0]['name']
+	#print songs_response['items'][5]['track']['name']
+
 	#url = generate_url(username, 0)
 	#data, success = get_data(url)
 	#if success:
 	for i in range(len(data['items'])):
-		song_names.append(data['items']['track']['name'])
-	return song_names
+		single_song_artists = []
+		song_names.append(data['items'][i]['track']['name'])
+		song_albums.append(data['items'][i]['track']['album']['name'])
+		for j in range(len(data['items'][i]['track']['artists'])):
+			single_song_artists.append(data['items'][i]['track']['artists'][j]['name'])
+		song_artists.append(single_song_artists)
+	
+	return song_names, song_albums, song_artists
 
 def main():
 	client_id = 'd56ed89f1ba04b3e89a6e3df3a99b91c'
@@ -88,13 +100,10 @@ def main():
 	songs_values = {'Authorization': 'Bearer ' + access_token}
 	songs_response = http_request_response(songs_url, songs_values, 'GET')
 	#use exceptions?!
-	print songs_response['items'][5]['track']['album']['name']
-	print songs_response['items'][5]['track']['artists'][0]['name']
-	print songs_response['items'][5]['track']['name']
-
+	
 #create dict of songs
-	song_names = get_songs_from_playlist(songs_response)
-	print song_names #need album name, track name, and artist name
+	song_names, song_albums, song_artists = get_songs_from_playlist(songs_response)
+	print song_names, song_albums, song_artists #need album name, track name, and artist name
 #destination = playlists[download_choice] + ".zip" #save to zip file?!
 #add auth etc error checking too
 #download form youtube?!
