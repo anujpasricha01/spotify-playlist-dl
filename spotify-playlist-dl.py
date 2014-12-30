@@ -50,9 +50,13 @@ def get_user_playlists(data):
 	return playlist_names, playlist_ids
 
 def get_songs_from_playlist(data):
-	song_names = []
-	song_albums = []
+	song_name = ''
+	song_album = ''
 	song_artists = []
+	song = []
+	songs_dict = {}
+	songs_list = []
+	song_val = {}
 	#print songs_response['items'][5]['track']['album']['name']
 	#print songs_response['items'][5]['track']['artists'][0]['name']
 	#print songs_response['items'][5]['track']['name']
@@ -62,13 +66,25 @@ def get_songs_from_playlist(data):
 	#if success:
 	for i in range(len(data['items'])):
 		single_song_artists = []
-		song_names.append(data['items'][i]['track']['name'])
-		song_albums.append(data['items'][i]['track']['album']['name'])
+		song_name = data['items'][i]['track']['name']
+		song_album = data['items'][i]['track']['album']['name']
 		for j in range(len(data['items'][i]['track']['artists'])):
 			single_song_artists.append(data['items'][i]['track']['artists'][j]['name'])
-		song_artists.append(single_song_artists)
+		song_artist = single_song_artists
+		song.append(i)
+		song.append(song_album)
+		song.append(song_name)
+		song.append(song_album)
+		songs_list.append(song)
+		#song_val_dict.update()
+		songs_dict.update({i+1: {'name': song_name, 'artists': song_artist, 'album': song_album}})
+	#print songs_list
+	#print '\n'
+	#for val in songs_list:
+	#	songs_dict[val[0]] = val[:]
+
 	
-	return song_names, song_albums, song_artists
+	return songs_dict
 
 def main():
 	client_id = 'd56ed89f1ba04b3e89a6e3df3a99b91c'
@@ -102,8 +118,10 @@ def main():
 	#use exceptions?!
 	
 #create dict of songs
-	song_names, song_albums, song_artists = get_songs_from_playlist(songs_response)
-	print song_names, song_albums, song_artists #need album name, track name, and artist name
+	songs_dict = get_songs_from_playlist(songs_response)
+	print songs_dict #need album name, track name, and artist name
+
+
 #destination = playlists[download_choice] + ".zip" #save to zip file?!
 #add auth etc error checking too
 #download form youtube?!
