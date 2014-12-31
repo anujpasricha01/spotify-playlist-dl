@@ -41,13 +41,15 @@ def generate_url(username, playlist_choice):
 def get_user_playlists(data):
 	playlist_names = []
 	playlist_ids = []
+	playlist_owners = []
 	#url = generate_url(username, 0)
 	#data, success = get_data(url)
 	#if success:
 	for i in range(len(data['items'])):
 		playlist_names.append(data['items'][i]['name'])
 		playlist_ids.append(data['items'][i]['id'])
-	return playlist_names, playlist_ids
+		playlist_owners.append(data['items'][i]['owner']['id'])
+	return playlist_names, playlist_ids, playlist_owners
 
 def get_songs_from_playlist(data):
 	song_name = ''
@@ -106,13 +108,14 @@ def main():
 	
 	#auth_success = authenticate_user(username, password)
 
-	playlist_names, playlist_ids = get_user_playlists(playlists_response)
+	playlist_names, playlist_ids, playlist_owners = get_user_playlists(playlists_response)
 	display_playlists(playlist_names) #with numbers
 	
 	playlist_choice = int(raw_input("Which playlist would you like to download? "))
 	playlist_id = playlist_ids[playlist_choice-1]
+	playlist_owner = playlist_owners[playlist_choice-1]
 
-	songs_url = "https://api.spotify.com/v1/users/" + username + "/playlists/" + playlist_id + "/tracks"
+	songs_url = "https://api.spotify.com/v1/users/" + playlist_owner + "/playlists/" + playlist_id + "/tracks"
 	songs_values = {'Authorization': 'Bearer ' + access_token}
 	songs_response = http_request_response(songs_url, songs_values, 'GET')
 	#use exceptions?!
